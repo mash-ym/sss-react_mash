@@ -10,16 +10,22 @@ interface SSSWindow extends Window {
 declare const window: SSSWindow
 
 const OWNER_ADDR = Address.createFromRawAddress(
-  'TB5DSKEF7TAB554HPPDF6TGLIIJMQI7JX3R7W2I'
+  'TDHLRYXKIT4QOEEL3PRBP4PWLJ6NWU3LSGB56BY'
 )
 
 function App() {
   const [addr, setAddr] = useState<Address | null>(null)
+  const [pubkey, setPubkey] = useState<string>('')
+
+  console.log('render')
 
   useEffect(() => {
+    console.log('hello')
     setTimeout(() => {
       const activeAddress = window.SSS.activeAddress
+      const activePublicKey = window.SSS.activePublicKey
       setAddr(Address.createFromRawAddress(activeAddress))
+      setPubkey(activePublicKey)
     }, 500)
   }, [])
 
@@ -32,7 +38,7 @@ function App() {
   }
 
   if (OWNER_ADDR.plain() === addr.plain()) {
-    return <OwnerPage />
+    return <OwnerPage address={addr.plain()} pubkey={pubkey} />
   }
   return <GuestPage address={addr.plain()} />
 }
